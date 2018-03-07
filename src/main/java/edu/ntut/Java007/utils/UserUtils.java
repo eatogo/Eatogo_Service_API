@@ -8,13 +8,13 @@ public class UserUtils {
 	public UserUtils() {
 	}
 
-	public static <T extends AccountPayload> User fromWebUserToDomainUser(T frontendPayload) {
+	public static <T extends AccountPayload> User fromWebUserToDomainUser(T payload) {
 		User user = new User();
 		
-		user.setUserName(frontendPayload.getUserName());
-		user.setUserCellphone(frontendPayload.getUserCellphone());
-		user.setUserPassword(frontendPayload.getUserPassword());
-		user.setUserEmail(frontendPayload.getUserEmail());
+		user.setUserName(payload.getUserName());
+		user.setUserCellphone(payload.getUserCellphone());
+		user.setUserPassword(payload.getUserPassword());
+		user.setUserEmail(payload.getUserEmail());
 		
 		return user;
 	}

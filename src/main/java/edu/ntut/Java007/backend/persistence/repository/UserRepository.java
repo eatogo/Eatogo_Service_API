@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import edu.ntut.Java007.backend.persistence.pojo.User;
 
 @Repository
-@Transactional(readOnly = true)
+@Transactional
 public interface UserRepository extends CrudRepository<User, String> {
 
 	/**
