@@ -43,9 +43,7 @@ public class MemberController {
 	public Map<String, Object> auth(@PathVariable(value = "userUuid") String userUuid) {
 		
 		Map<String, Object> returnJson = new HashMap<String, Object>();
-		Auth auth = new Auth();
-		
-		auth = authService.findByUserUuid(userUuid);
+		Auth auth = authService.findByUserUuid(userUuid);
 		
 		if (!"".equals(auth.getUserUuid())) {
 			returnJson.put("status", 200);
@@ -70,11 +68,10 @@ public class MemberController {
 		
 		Map<String, Object> returnJson = new HashMap<String, Object>();
 		Auth auth = new Auth();
-		User user = new User();
 		
-		LOG.info("Login data received: userCellphone={}, userPassword={}", userCellphone, userPassword);
+		LOG.info("Login data received: userCellphone={}", userCellphone);
 		
-		user = userService.findByUserCellphone(userCellphone);
+		User user = userService.findByUserCellphone(userCellphone);
 		
 		// 檢查手機號碼是否重複
 		if (!"".equals(user.getUserCellphone()) && 
