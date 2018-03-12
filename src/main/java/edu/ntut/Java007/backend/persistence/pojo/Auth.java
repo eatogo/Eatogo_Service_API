@@ -1,5 +1,7 @@
 package edu.ntut.Java007.backend.persistence.pojo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -7,7 +9,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "AUTHENTICATIONS")
-public class Auth {
+public class Auth implements Serializable {
+	
+	/** The Serial Version UID for Serializable classes. */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@Column(name = "user_id")
@@ -15,15 +20,6 @@ public class Auth {
 	
 	@Column(name = "user_uuid")
 	private String userUuid;
-
-	public Auth() {
-	}
-
-	public Auth(Integer userId, String userUuid) {
-		super();
-		this.userId = userId;
-		this.userUuid = userUuid;
-	}
 
 	public Integer getUserId() {
 		return userId;

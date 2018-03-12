@@ -4,6 +4,8 @@ import edu.ntut.Java007.backend.persistence.pojo.User;
 import edu.ntut.Java007.web.frontend.AccountPayload;
 
 public class UserUtils {
+	
+	private UserUtils() {};
 
 	public static <T extends AccountPayload> User fromWebUserToDomainUser(T payload) {
 		User user = new User();

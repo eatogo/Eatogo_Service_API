@@ -18,8 +18,16 @@ public class AuthService {
 		return authRepository.findByUserUuid(userUuid);
 	}
 	
+	public Auth findByUserId(Integer userId) {
+		return authRepository.findByUserId(userId);
+	}
+	
 	public Auth createAuth(Auth auth) {
 		return authRepository.save(auth);
+	}
+	
+	public void deleteAuth(Auth auth) {
+		authRepository.delete(auth);
 	}
 
 }
