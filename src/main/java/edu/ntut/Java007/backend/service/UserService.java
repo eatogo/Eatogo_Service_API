@@ -16,13 +16,12 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	/**
-	 * Returns a user by userCellphone or null if a user could not be found.
-	 * @param userCellphone The userCellphone to be found
-	 * @return A user by userCellphone or null if a user could not be found.
-	 */
 	public User findByUserCellphone(String userCellphone) {
 		return userRepository.findByUserCellphone(userCellphone);
+	}
+	
+	public User findByUserId(Integer userId) {
+		return userRepository.findByUserId(userId);
 	}
 	
 	public User createUser(User user) {

@@ -43,21 +43,6 @@ public class User implements Serializable {
 	@Column(name = "user_status")
 	private String userStatus;
 	
-	public User() {
-	}
-
-	public User(Integer userId, String userPassword, String userCellphone, String userName, String userEmail,
-			String userAvatar, Date userCreateTime, String userStatus) {
-		this.userId = userId;
-		this.userPassword = userPassword;
-		this.userCellphone = userCellphone;
-		this.userName = userName;
-		this.userEmail = userEmail;
-		this.userAvatar = userAvatar;
-		this.userCreateTime = userCreateTime;
-		this.userStatus = userStatus;
-	}
-
 	public Integer getUserId() {
 		return userId;
 	}

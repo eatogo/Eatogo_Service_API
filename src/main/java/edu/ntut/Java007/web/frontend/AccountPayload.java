@@ -13,26 +13,16 @@ public class AccountPayload implements Serializable {
 
 	@NotNull
 	private String userName;
-	
+
 	@NotNull
 	private String userCellphone;
-	
+
 	@NotNull
 	private String userPassword;
-	
+
 	@Email
 	@NotNull
 	private String userEmail;
-
-	public AccountPayload() {
-	}
-
-	public AccountPayload(String userName, String userCellphone, String userPassword, String userEmail) {
-		this.userName = userName;
-		this.userCellphone = userCellphone;
-		this.userPassword = userPassword;
-		this.userEmail = userEmail;
-	}
 
 	public String getUserName() {
 		return userName;
@@ -94,12 +84,9 @@ public class AccountPayload implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("AccountPayload [")
-			.append("userName=").append(userName)
-			.append(", userCellphone=").append(userCellphone)
-			.append(", userPassword=").append(userPassword)
-			.append(", userEmail=").append(userEmail)
-			.append("]");
+		builder.append("AccountPayload [").append("userName=").append(userName).append(", userCellphone=")
+				.append(userCellphone).append(", userPassword=").append(userPassword).append(", userEmail=")
+				.append(userEmail).append("]");
 		return builder.toString();
 	}
 

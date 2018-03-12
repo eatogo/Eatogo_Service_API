@@ -8,9 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.ntut.Java007.backend.persistence.pojo.Auth;
@@ -32,112 +34,111 @@ public class MemberController {
 
 	@Autowired
 	private UserService userService;
-	
-	/**
-	 * Authenticate through userUuid or return null if no userUuid is found.
-	 * @param userUuid The given userUuid from client.
-	 * @return Json string containing status and an Auth object with userId and userUuid
-	 */
+
+	private Map<String, Object> returnJson;
+
 	@CrossOrigin(origins = "http://localhost:9000")
-	@RequestMapping(value = "auth/{userUuid}", method = RequestMethod.GET)
-	public Map<String, Object> auth(@PathVariable(value = "userUuid") String userUuid) {
-		
-		Map<String, Object> returnJson = new HashMap<String, Object>();
+	@GetMapping(value = "/auth/{userUuid}")
+	public Map<String, Object> authGet(@PathVariable(value = "userUuid") String userUuid) {
+		returnJson = new HashMap<String, Object>();
+
+		// 檢查授權
 		Auth auth = authService.findByUserUuid(userUuid);
-		
-		if (!"".equals(auth.getUserUuid())) {
+		// 確認授權及uuid存在
+		if (auth != null && !"".equals(auth.getUserUuid())) {
+			User user = userService.findByUserId(auth.getUserId());
 			returnJson.put("status", 200);
 			returnJson.put("auth", auth);
+			returnJson.put("user", user);
 		} else {
 			returnJson.put("status", 500);
 		}
 		return returnJson;
 	}
-	
-	/**
-	 * Login with given userCellphone and userPassword or null if not found or not matched.
-	 * @param userCellphone The given userCellphone from client.
-	 * @param userPassword The given userPassword from client.
-	 * @return Json string containing status and an Auth object with userId and userUuid or null if not found or not matched
-	 */
+
 	@CrossOrigin(origins = "http://localhost:9000")
-	@RequestMapping(value = "/login/{userCellphone}/{userPassword}", method = RequestMethod.GET)
-	public Map<String, Object> login(
-			@PathVariable("userCellphone") String userCellphone, 
+	@DeleteMapping(value = "/auth/{userUuid}")
+	public Map<String, Object> authDelete(@PathVariable(value = "userUuid") String userUuid) {
+		returnJson = new HashMap<String, Object>();
+		
+		// 刪除授權紀錄
+		authService.deleteAuth(authService.findByUserUuid(userUuid));	
+		returnJson.put("status", 200);
+		return returnJson;
+	}
+
+	@CrossOrigin(origins = "http://localhost:9000")
+	@GetMapping(value = "/login/{userCellphone}/{userPassword}")
+	public Map<String, Object> login(@PathVariable("userCellphone") String userCellphone,
 			@PathVariable("userPassword") String userPassword) {
-		
-		Map<String, Object> returnJson = new HashMap<String, Object>();
+		returnJson = new HashMap<String, Object>();
 		Auth auth = new Auth();
-		
-		LOG.info("Login data received: userCellphone={}", userCellphone);
-		
+
+		// 查詢註冊紀錄
 		User user = userService.findByUserCellphone(userCellphone);
-		
-		// 檢查手機號碼是否重複
-		if (!"".equals(user.getUserCellphone()) && 
-				userPassword.equals(user.getUserPassword())) {
+		// 確認紀錄是否存在以及密碼是否正確
+		if (user != null && userPassword.equals(user.getUserPassword())) {
 			auth.setUserId(user.getUserId());
-			
-			UUID uid = UUID.randomUUID();
-			LOG.info("New UUID: {}", uid.toString());
-			auth.setUserUuid(uid.toString());
-			auth = authService.createAuth(auth);
+			auth = generateUuid(auth);
 
 			returnJson.put("status", 200);
 			returnJson.put("auth", auth);
+			returnJson.put("user", user);
 		} else {
 			returnJson.put("status", 500);
 		}
-		
 		return returnJson;
 	}
-	
-	/**
-	 * Create an user if userCellphone is not found or return null if user already exists
-	 * @param payload The signup info from client
-	 * @return Json string containing status and an Auth object with userId and userUuid or null if user already exists
-	 */
+
 	@CrossOrigin(origins = "http://localhost:9000")
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public Map<String, Object> signupPost(AccountPayload payload) {
-		
-		Map<String, Object> returnJson = new HashMap<String, Object>();
+	@PostMapping(value = "/signup")
+	public Map<String, Object> signup(AccountPayload payload) {
+		returnJson = new HashMap<String, Object>();
 		Auth auth = new Auth();
 		User user = new User();
-		System.out.println(auth.toString() + user.toString());
-		
-		LOG.info("Signup form data received: {}", payload.toString());
-		
+
+		// 檢查註冊紀錄
 		user = userService.findByUserCellphone(payload.getUserCellphone());
-		
-		// 檢查申請資料(手機)是否重複
+
+		// 檢查申請資料(手機號碼)是否重複
 		if (user == null || null == user.getUserCellphone()) {
 			LOG.info("Data not duplicated");
-			LOG.info("Transforming user payload into User domain object");
 			// 將payload資料map進user
 			user = UserUtils.fromWebUserToDomainUser(payload);
 			// 建立使用者
 			user = userService.createUser(user);
-			
-			if (!"".equals(user.getUserStatus())) {
-				// 如果使用者成功建立
+
+			if (user != null && !"".equals(user.getUserStatus())) {
+				// 使用者成功建立
 				LOG.info("User has been successfully created");
 				auth.setUserId(user.getUserId());
-				
-				UUID uid = UUID.randomUUID();
-				LOG.info("New UUID: {}", uid.toString());
-				auth.setUserUuid(uid.toString());
-				auth = authService.createAuth(auth);
+				auth = generateUuid(auth);
 
 				returnJson.put("status", 200);
 				returnJson.put("auth", auth);
+				returnJson.put("user", user);
 			} else {
-				LOG.warn("User creation failed");
+				// 使用者建立失敗
+				LOG.warn("Fail to create new user");
 				returnJson.put("status", 500);
 			}
 		}
-		
+
 		return returnJson;
 	}
-	
+
+	private Auth generateUuid(Auth auth) {
+		Integer userId = auth.getUserId();
+		auth = authService.findByUserId(auth.getUserId());
+		if (auth == null || auth.getUserUuid().isEmpty()) {
+			UUID uid = UUID.randomUUID();
+			LOG.info("New UUID: {}", uid.toString());
+			auth = new Auth();
+			auth.setUserId(userId);
+			auth.setUserUuid(uid.toString());
+			auth = authService.createAuth(auth);
+		}
+		return auth;
+	}
+
 }

@@ -11,4 +11,6 @@ import edu.ntut.Java007.backend.persistence.pojo.Auth;
 public interface AuthRepository extends CrudRepository<Auth, Integer> {
 
 	Auth findByUserUuid(String userUuid);
+	
+	Auth findByUserId(Integer userId);
 }
