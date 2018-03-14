@@ -4,7 +4,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.ntut.Java007.backend.persistence.pojo.Auth;
+import edu.ntut.Java007.backend.persistence.po.Auth;
 
 @Repository
 @Transactional

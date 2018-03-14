@@ -1,4 +1,4 @@
-package edu.ntut.Java007.web.frontend;
+package edu.ntut.Java007.web.vo;
 
 import java.io.Serializable;
 
@@ -79,15 +79,6 @@ public class AccountPayload implements Serializable {
 		} else if (!userCellphone.equals(other.userCellphone))
 			return false;
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("AccountPayload [").append("userName=").append(userName).append(", userCellphone=")
-				.append(userCellphone).append(", userPassword=").append(userPassword).append(", userEmail=")
-				.append(userEmail).append("]");
-		return builder.toString();
 	}
 
 }

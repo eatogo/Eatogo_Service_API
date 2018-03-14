@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.ntut.Java007.backend.persistence.pojo.Auth;
-import edu.ntut.Java007.backend.persistence.pojo.User;
+import edu.ntut.Java007.backend.persistence.po.Auth;
+import edu.ntut.Java007.backend.persistence.po.User;
 import edu.ntut.Java007.backend.service.AuthService;
 import edu.ntut.Java007.backend.service.UserService;
 import edu.ntut.Java007.utils.UserUtils;
-import edu.ntut.Java007.web.frontend.AccountPayload;
+import edu.ntut.Java007.web.vo.AccountPayload;
 
 @RestController
 @RequestMapping(value = "/member")

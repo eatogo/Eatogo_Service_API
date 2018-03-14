@@ -1,7 +1,7 @@
 package edu.ntut.Java007.utils;
 
-import edu.ntut.Java007.backend.persistence.pojo.User;
-import edu.ntut.Java007.web.frontend.AccountPayload;
+import edu.ntut.Java007.backend.persistence.po.User;
+import edu.ntut.Java007.web.vo.AccountPayload;
 
 public class UserUtils {
 	

@@ -1,4 +1,4 @@
-package edu.ntut.Java007.backend.persistence.pojo;
+package edu.ntut.Java007.backend.persistence.po;
 
 import java.io.Serializable;
 import java.util.Date;
