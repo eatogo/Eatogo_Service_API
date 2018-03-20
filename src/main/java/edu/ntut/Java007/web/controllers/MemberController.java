@@ -95,10 +95,9 @@ public class MemberController {
 	public Map<String, Object> signup(AccountPayload payload) {
 		returnJson = new HashMap<String, Object>();
 		Auth auth = new Auth();
-		User user = new User();
 
 		// 檢查註冊紀錄
-		user = userService.findByUserCellphone(payload.getUserCellphone());
+		User user = userService.findByUserCellphone(payload.getUserCellphone());
 
 		// 檢查申請資料(手機號碼)是否重複
 		if (user == null || null == user.getUserCellphone()) {

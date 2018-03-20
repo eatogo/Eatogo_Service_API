@@ -5,11 +5,13 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
+@IdClass(StoreAuthorizationPks.class)
 @Table(name = "STORE_AUTHORIZATIONS")
-public class StoreAuth implements Serializable {
+public class StoreAuthorization implements Serializable {
 	
 	/** The Serial Version UID for Serializable classes. */
 	private static final long serialVersionUID = 1L;
@@ -18,6 +20,7 @@ public class StoreAuth implements Serializable {
 	@Column(name = "store_auth_id")
 	private Integer storeAuthId;
 	
+	@Id
 	@Column(name = "store_auth_user")
 	private Integer storeAuthUser;
 	

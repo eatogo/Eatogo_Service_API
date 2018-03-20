@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +17,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.ntut.Java007.backend.persistence.po.Store;
-import edu.ntut.Java007.backend.persistence.po.StoreAuth;
+import edu.ntut.Java007.backend.persistence.po.StoreAuthorization;
 import edu.ntut.Java007.backend.service.StoreAuthService;
 import edu.ntut.Java007.backend.service.StoreService;
 import edu.ntut.Java007.utils.StoreUtils;
@@ -29,9 +27,6 @@ import edu.ntut.Java007.web.vo.StoreInfoPayload;
 @RestController
 @RequestMapping("/store/landing")
 public class StoreLandingPageController {
-	
-	/** The application logger */
-	private static final Logger LOG = LoggerFactory.getLogger(StoreLandingPageController.class);
 	
 	@Autowired
 	private StoreAuthService storeAuthService;
@@ -43,22 +38,19 @@ public class StoreLandingPageController {
 	private ObjectMapper mapper;
 	
 	private Map<String, Object> returnJson;
-	private List<LandingPayload> payloads;
-	private LandingPayload payload;
-	private Store store;
 	
 	@CrossOrigin(origins = "http://localhost:9000")
 	@GetMapping(value = "/{userId}")
 	public Map<String, Object> getStores(@PathVariable(value = "userId") Integer userId) throws JsonProcessingException {
 		returnJson = new HashMap<String, Object>();
-		payloads = new ArrayList<>();
+		List<LandingPayload> payloads = new ArrayList<>();
 		
-		List<StoreAuth> storeAuths = storeAuthService.findStoreAuthsByStoreAuthUser(userId);
+		List<StoreAuthorization> storeAuths = storeAuthService.findStoreAuthsByStoreAuthUser(userId);
 		
 		if (storeAuths != null) {
-			for (StoreAuth storeAuth : storeAuths) {
-				store = storeService.findStoreByStoreId(storeAuth.getStoreAuthId());
-				payload = StoreUtils.fromDomainStoreToWebStorePayload(store);
+			for (StoreAuthorization storeAuth : storeAuths) {
+				Store store = storeService.findStoreByStoreId(storeAuth.getStoreAuthId());
+				LandingPayload payload = StoreUtils.fromDomainStoreToWebStorePayload(store);
 				payloads.add(payload);
 			}
 			
@@ -77,8 +69,18 @@ public class StoreLandingPageController {
 	@PostMapping(value = "/{userId}")
 	public Map<String, Object> createStore(@PathVariable(value = "userId") Integer userId, StoreInfoPayload payload) {
 		returnJson = new HashMap<String, Object>();
-		LOG.info(payload.toString());
 		
+		Store store = StoreUtils.fromWebStoreInfoPayloadToDomainStore(payload);
+		store = storeService.createStore(store);
+		
+		StoreAuthorization storeAuthorization = StoreUtils.fromWebStoreInfoToDomainStoreAuth(store.getStoreId(), userId, "owner");
+		storeAuthorization = storeAuthService.createStoreAuthorization(storeAuthorization);
+		
+		if (store != null && storeAuthorization != null) {
+			returnJson.put("status", 200);
+		} else {
+			returnJson.put("status", 500);
+		}
 		return returnJson;
 	}
 }

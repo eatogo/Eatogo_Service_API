@@ -18,4 +18,11 @@ public class StoreService {
 		return storeRepository.findByStoreId(storeId);
 	}
 
+	public Store createStore(Store store) {
+		return storeRepository.save(store);
+	}
+	
+	public Store updateStore(Store store) {
+		return storeRepository.save(store);
+	}
 }

@@ -25,8 +25,11 @@ public class ControllerLogAspect {
 	/** The application logger */
 	private static final Logger LOG = LoggerFactory.getLogger(ControllerLogAspect.class);
 	
+	/**
+	 * This method is only to locate pointcuts for series of aspects before and after pointcut
+	 */
 	@Pointcut("execution(* edu.ntut.Java007.web.controllers.*.*(..))")
-	public void log() {}
+	public void log() throws UnsupportedOperationException {}
 	
 	@Before("log()")
 	public void doBefore(JoinPoint joinPoint) {

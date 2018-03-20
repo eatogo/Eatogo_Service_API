@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import edu.ntut.Java007.backend.persistence.po.StoreAuth;
+import edu.ntut.Java007.backend.persistence.po.StoreAuthorization;
 import edu.ntut.Java007.backend.persistence.repository.StoreAuthRepository;
 
 @Service
@@ -16,11 +16,15 @@ public class StoreAuthService {
 	@Autowired
 	private StoreAuthRepository storeAuthRepository;
 	
-	public List<StoreAuth> findStoreAuthsByStoreAuthId(Integer storeAuthId) {
+	public List<StoreAuthorization> findStoreAuthsByStoreAuthId(Integer storeAuthId) {
 		return storeAuthRepository.findByStoreAuthId(storeAuthId);
 	}
 	
-	public List<StoreAuth> findStoreAuthsByStoreAuthUser(Integer storeAuthUser) {
+	public List<StoreAuthorization> findStoreAuthsByStoreAuthUser(Integer storeAuthUser) {
 		return storeAuthRepository.findByStoreAuthUser(storeAuthUser);
 	}
+	
+	public StoreAuthorization createStoreAuthorization(StoreAuthorization storeAuth) {
+		return storeAuthRepository.save(storeAuth);
+	};
 }

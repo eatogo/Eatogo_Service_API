@@ -13,6 +13,10 @@ public class StoreInfoPayload implements Serializable {
 	
 	private String storeAddress;
 	
+	private Double storeLatitude;
+	
+	private Double storeLongitude;
+	
 	private String storePhone;
 	
 	private String storeEmail;
@@ -21,7 +25,7 @@ public class StoreInfoPayload implements Serializable {
 	
 	private String storeIntro;
 	
-	private String storeArea;
+	private Integer storeArea;
 	
 	private String storeOperateType;
 
@@ -44,9 +48,25 @@ public class StoreInfoPayload implements Serializable {
 	public String getStoreAddress() {
 		return storeAddress;
 	}
-
+	
 	public void setStoreAddress(String storeAddress) {
 		this.storeAddress = storeAddress;
+	}
+
+	public Double getStoreLatitude() {
+		return storeLatitude;
+	}
+
+	public void setStoreLatitude(Double storeLatitude) {
+		this.storeLatitude = storeLatitude;
+	}
+
+	public Double getStoreLongitude() {
+		return storeLongitude;
+	}
+
+	public void setStoreLongitude(Double storeLongitude) {
+		this.storeLongitude = storeLongitude;
 	}
 
 	public String getStorePhone() {
@@ -81,11 +101,11 @@ public class StoreInfoPayload implements Serializable {
 		this.storeIntro = storeIntro;
 	}
 
-	public String getStoreArea() {
+	public Integer getStoreArea() {
 		return storeArea;
 	}
 
-	public void setStoreArea(String storeArea) {
+	public void setStoreArea(Integer storeArea) {
 		this.storeArea = storeArea;
 	}
 
@@ -100,18 +120,13 @@ public class StoreInfoPayload implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("StoreInfoPayload [")
-			.append("storeId=").append(storeId)
-			.append(", storeName=").append(storeName)
-			.append(", storeAddress=").append(storeAddress)
-			.append(", storePhone=").append(storePhone)
-			.append(", storeEmail=").append(storeEmail)
-			.append(", storeOpenHour=").append(storeOpenHour)
-			.append(", storeIntro=").append(storeIntro)
-			.append(", storeArea=").append(storeArea)
-			.append(", storeOperateType=").append(storeOperateType)
-			.append("]");
+		builder.append("StoreInfoPayload [storeId=").append(storeId).append(", storeName=").append(storeName)
+				.append(", storeAddress=").append(storeAddress).append(", storeLatitude=").append(storeLatitude)
+				.append(", storeLongitude=").append(storeLongitude).append(", storePhone=").append(storePhone)
+				.append(", storeEmail=").append(storeEmail).append(", storeOpenHour=").append(storeOpenHour)
+				.append(", storeIntro=").append(storeIntro).append(", storeArea=").append(storeArea)
+				.append(", storeOperateType=").append(storeOperateType).append("]");
 		return builder.toString();
 	}
-
+	
 }
