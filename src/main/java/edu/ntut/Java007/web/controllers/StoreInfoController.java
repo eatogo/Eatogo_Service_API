@@ -35,9 +35,8 @@ public class StoreInfoController {
 	@GetMapping("/{storeId}")
 	public Map<String, Object> getStoreInfo(@PathVariable Integer storeId) throws JsonProcessingException {
 		returnJson = new HashMap<String, Object>();
-		StoreInfoPayload payload;
 		Store store = storeService.findStoreByStoreId(storeId);
-		payload = StoreUtils.fromDomainStoreToWebStoreInfo(store);
+		StoreInfoPayload payload = StoreUtils.fromDomainStoreToWebStoreInfo(store);
 		
 		if (payload != null) {
 			String jsonInString = mapper.writeValueAsString(payload);
