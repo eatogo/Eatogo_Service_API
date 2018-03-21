@@ -26,5 +26,17 @@ public class StoreAuthService {
 	
 	public StoreAuthorization createStoreAuthorization(StoreAuthorization storeAuth) {
 		return storeAuthRepository.save(storeAuth);
-	};
+	}
+	
+	public List<StoreAuthorization> findStoreAuthsByStoreAuthIdAndStoreAuth(Integer storeAuthId, String storeAuth) {
+		return storeAuthRepository.findByStoreAuthIdAndStoreAuth(storeAuthId, storeAuth);
+	}
+	
+	public void deleteEmployee(StoreAuthorization storeAuth) {
+		storeAuthRepository.delete(storeAuth);
+	}
+	
+	public StoreAuthorization findStoreAuthByStoreAuthIdAndStoreAuthUser(Integer storeAuthId, Integer storeAuthUser) {
+		return storeAuthRepository.findByStoreAuthIdAndStoreAuthUser(storeAuthId, storeAuthUser);
+	}
 }

@@ -51,4 +51,12 @@ public class StoreAuthorization implements Serializable {
 		this.storeAuth = storeAuth;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("StoreAuthorization [storeAuthId=").append(storeAuthId).append(", storeAuthUser=")
+				.append(storeAuthUser).append(", storeAuth=").append(storeAuth).append("]");
+		return builder.toString();
+	}
+
 }

@@ -15,4 +15,9 @@ public interface StoreAuthRepository extends JpaRepository<StoreAuthorization, I
 	public List<StoreAuthorization> findByStoreAuthId(Integer storeAuthId);
 	
 	public List<StoreAuthorization> findByStoreAuthUser(Integer storeAuthUser);
+	
+	public List<StoreAuthorization> findByStoreAuthIdAndStoreAuth(Integer storeAuthId, String storeAuth);
+	
+	public StoreAuthorization findByStoreAuthIdAndStoreAuthUser(Integer storeAuthId, Integer storeAuthUser);
+	
 }
