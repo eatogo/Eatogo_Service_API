@@ -19,4 +19,16 @@ public class FoodService {
 	public List<Food> findMenuByStoreId(Integer storeId) {
 		return foodRepository.findByFoodStore(storeId);
 	}
+	
+	public Food findFoodByFoodId(Integer foodId) {
+		return foodRepository.findOne(foodId);
+	}
+	
+	public Food createFood(Food food) {
+		return foodRepository.save(food);
+	}
+	
+	public Food updateFood(Food food) {
+		return foodRepository.save(food);
+	}
 }

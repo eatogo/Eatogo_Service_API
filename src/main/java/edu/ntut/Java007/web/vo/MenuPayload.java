@@ -17,6 +17,8 @@ public class MenuPayload implements Serializable {
 	
 	private String foodIntro;
 	
+	private String foodType;
+	
 	private String foodPicMdpi;
 
 	public Integer getFoodId() {
@@ -57,6 +59,14 @@ public class MenuPayload implements Serializable {
 
 	public void setFoodIntro(String foodIntro) {
 		this.foodIntro = foodIntro;
+	}
+
+	public String getFoodType() {
+		return foodType;
+	}
+
+	public void setFoodType(String foodType) {
+		this.foodType = foodType;
 	}
 
 	public String getFoodPicMdpi() {
