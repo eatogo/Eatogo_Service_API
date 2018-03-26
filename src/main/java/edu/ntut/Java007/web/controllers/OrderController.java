@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +27,7 @@ import edu.ntut.Java007.backend.service.OrderService;
 import edu.ntut.Java007.backend.service.UserService;
 import edu.ntut.Java007.utils.DateUtils;
 import edu.ntut.Java007.utils.OrderUtils;
+import edu.ntut.Java007.web.vo.OrderChangeStatePayload;
 import edu.ntut.Java007.web.vo.OrderDetailPayload;
 import edu.ntut.Java007.web.vo.OrderPayload;
 
@@ -61,8 +63,8 @@ public class OrderController {
 			Map<String, Object> returnMap = new HashMap<>();
 			// 分別取出各種狀態訂單，分成三類後，存進returnMap
 			returnMap = getOrdersByOrderStatus(storeId, returnMap, "ordered", "ordered");
-			returnMap = getOrdersByOrderStatus(storeId, returnMap, "unfinished", "unfinished", "unconfirmd_store");
-			returnMap = getOrdersByOrderStatus(storeId, returnMap, "finished", "unconfirmd_user", "finished", "abandoned");
+			returnMap = getOrdersByOrderStatus(storeId, returnMap, "unfinished", "unfinished", "unconfirmed_store");
+			returnMap = getOrdersByOrderStatus(storeId, returnMap, "finished", "unconfirmed_user", "finished");
 			// 將returnMap序列化後再存到returnJson
 			String jsonInString = mapper.writeValueAsString(returnMap);
 			returnJson.put("orderPayload", jsonInString);
@@ -110,9 +112,9 @@ public class OrderController {
 				User orderUser = userService.findByUserId(order.getOrderUser());
 				User confirmOrderUser = userService.findByUserId(order.getOrderConfirmUser());
 				OrderPayload payload = new OrderPayload();
-				if (orderStatus == "finished" || orderStatus == "unconfirmd_user" || orderStatus == "abandoned") {
+				if (orderStatus == "finished" || orderStatus == "unconfirmed_user" || orderStatus == "abandoned") {
 					payload = OrderUtils.fromDomainOrderToWebFinishedOrderPayload(order, orderUser, confirmOrderUser, detailPayloads);
-				} else if (orderStatus == "unfinished" || orderStatus == "unconfirmd_store") {
+				} else if (orderStatus == "unfinished" || orderStatus == "unconfirmed_store") {
 					payload = OrderUtils.fromDomainOrderToWebUnfinishedOrderPayload(order, orderUser, confirmOrderUser, detailPayloads);
 				} else if (orderStatus == "ordered") {
 					payload = OrderUtils.fromDomainOrderToWebOrderedOrderPayload(order, orderUser, detailPayloads);
@@ -125,4 +127,95 @@ public class OrderController {
 		returnMap.put(keyName, orderList);
 		return returnMap;
 	}
+	
+	@CrossOrigin(origins = "http://localhost:9000")
+	@PutMapping("/confirm")
+	public Map<String, Object> confirmOrder(OrderChangeStatePayload payload) throws ParseException, JsonProcessingException {
+		returnJson = new HashMap<>();
+		beginTime = DateUtils.formatDate("2000-01-01");
+		endTime = DateUtils.formatDate("2018-12-31");
+		Order order = orderService.findByOrderId(payload.getOrderId());
+		if (order != null) {
+			order.setOrderStatus("unfinished");
+			order.setOrderConfirmTime(new Date(System.currentTimeMillis()));
+			order = orderService.setOrderConfirmed(order);
+			if (order != null) {
+				Map<String, Object> returnMap = new HashMap<>();
+				// 分別取出各種狀態訂單，分成三類後，存進returnMap
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "ordered", "ordered");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "unfinished", "unfinished", "unconfirmed_store");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "finished", "unconfirmed_user", "finished");
+				// 將returnMap序列化後再存到returnJson
+				String jsonInString = mapper.writeValueAsString(returnMap);
+				returnJson.put("orderPayload", jsonInString);
+				returnJson.put("status", 200);
+			} else {
+				returnJson.put("status", 500);
+			}
+		}
+		return returnJson;
+	}
+	
+	@CrossOrigin(origins = "http://localhost:9000")
+	@PutMapping("/finish")
+	public Map<String, Object> finishOrder(OrderChangeStatePayload payload) throws ParseException, JsonProcessingException {
+		returnJson = new HashMap<>();
+		beginTime = DateUtils.formatDate("2000-01-01");
+		endTime = DateUtils.formatDate("2018-12-31");
+		Order order = orderService.findByOrderId(payload.getOrderId());
+		if (order != null) {
+			System.out.println(order.toString());
+			if (order.getOrderStatus().equals("unfinished")) {
+				order.setOrderStatus("unconfirmed_user");
+			} else if (order.getOrderStatus().equals("unconfirmed_store")) {
+				order.setOrderStatus("finished");
+			}
+			order.setOrderFinishedTime(new Date(System.currentTimeMillis()));
+			order = orderService.setOrderConfirmed(order);
+			if (order != null) {
+				Map<String, Object> returnMap = new HashMap<>();
+				// 分別取出各種狀態訂單，分成三類後，存進returnMap
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "ordered", "ordered");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "unfinished", "unfinished", "unconfirmed_store");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "finished", "unconfirmed_user", "finished");
+				// 將returnMap序列化後再存到returnJson
+				String jsonInString = mapper.writeValueAsString(returnMap);
+				returnJson.put("orderPayload", jsonInString);
+				returnJson.put("status", 200);
+			} else {
+				returnJson.put("status", 500);
+			}
+		} else {
+			returnJson.put("status", 500);
+		}
+		return returnJson;
+	}
+	
+	@CrossOrigin(origins = "http://localhost:9000")
+	@PutMapping("/blackList")
+	public Map<String, Object> blackList(OrderChangeStatePayload payload) throws ParseException, JsonProcessingException {
+		returnJson = new HashMap<>();
+		beginTime = DateUtils.formatDate("2000-01-01");
+		endTime = DateUtils.formatDate("2018-12-31");
+		Order order = orderService.findByOrderId(payload.getOrderId());
+		if (order != null) {
+			order.setOrderStatus("abandoned");
+			order = orderService.setOrderConfirmed(order);
+			if (order != null) {
+				Map<String, Object> returnMap = new HashMap<>();
+				// 分別取出各種狀態訂單，分成三類後，存進returnMap
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "ordered", "ordered");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "unfinished", "unfinished", "unconfirmed_store");
+				returnMap = getOrdersByOrderStatus(order.getOrderId(), returnMap, "finished", "unconfirmed_user", "finished");
+				// 將returnMap序列化後再存到returnJson
+				String jsonInString = mapper.writeValueAsString(returnMap);
+				returnJson.put("orderPayload", jsonInString);
+				returnJson.put("status", 200);
+			} else {
+				returnJson.put("status", 500);
+			}
+		}
+		return returnJson;
+	}
+	
 }

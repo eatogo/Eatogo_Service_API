@@ -160,5 +160,96 @@ public class Order implements Serializable {
 				.append(", orderSerialNo=").append(orderSerialNo).append("]");
 		return builder.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((orderConfirmTime == null) ? 0 : orderConfirmTime.hashCode());
+		result = prime * result + ((orderConfirmUser == null) ? 0 : orderConfirmUser.hashCode());
+		result = prime * result + ((orderFinishedTime == null) ? 0 : orderFinishedTime.hashCode());
+		result = prime * result + ((orderId == null) ? 0 : orderId.hashCode());
+		result = prime * result + ((orderNote == null) ? 0 : orderNote.hashCode());
+		result = prime * result + ((orderReserveDate == null) ? 0 : orderReserveDate.hashCode());
+		result = prime * result + ((orderSerialNo == null) ? 0 : orderSerialNo.hashCode());
+		result = prime * result + ((orderStatus == null) ? 0 : orderStatus.hashCode());
+		result = prime * result + ((orderStore == null) ? 0 : orderStore.hashCode());
+		result = prime * result + ((orderTakeoutPeriod == null) ? 0 : orderTakeoutPeriod.hashCode());
+		result = prime * result + ((orderTime == null) ? 0 : orderTime.hashCode());
+		result = prime * result + ((orderUser == null) ? 0 : orderUser.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Order other = (Order) obj;
+		if (orderConfirmTime == null) {
+			if (other.orderConfirmTime != null)
+				return false;
+		} else if (!orderConfirmTime.equals(other.orderConfirmTime))
+			return false;
+		if (orderConfirmUser == null) {
+			if (other.orderConfirmUser != null)
+				return false;
+		} else if (!orderConfirmUser.equals(other.orderConfirmUser))
+			return false;
+		if (orderFinishedTime == null) {
+			if (other.orderFinishedTime != null)
+				return false;
+		} else if (!orderFinishedTime.equals(other.orderFinishedTime))
+			return false;
+		if (orderId == null) {
+			if (other.orderId != null)
+				return false;
+		} else if (!orderId.equals(other.orderId))
+			return false;
+		if (orderNote == null) {
+			if (other.orderNote != null)
+				return false;
+		} else if (!orderNote.equals(other.orderNote))
+			return false;
+		if (orderReserveDate == null) {
+			if (other.orderReserveDate != null)
+				return false;
+		} else if (!orderReserveDate.equals(other.orderReserveDate))
+			return false;
+		if (orderSerialNo == null) {
+			if (other.orderSerialNo != null)
+				return false;
+		} else if (!orderSerialNo.equals(other.orderSerialNo))
+			return false;
+		if (orderStatus == null) {
+			if (other.orderStatus != null)
+				return false;
+		} else if (!orderStatus.equals(other.orderStatus))
+			return false;
+		if (orderStore == null) {
+			if (other.orderStore != null)
+				return false;
+		} else if (!orderStore.equals(other.orderStore))
+			return false;
+		if (orderTakeoutPeriod == null) {
+			if (other.orderTakeoutPeriod != null)
+				return false;
+		} else if (!orderTakeoutPeriod.equals(other.orderTakeoutPeriod))
+			return false;
+		if (orderTime == null) {
+			if (other.orderTime != null)
+				return false;
+		} else if (!orderTime.equals(other.orderTime))
+			return false;
+		if (orderUser == null) {
+			if (other.orderUser != null)
+				return false;
+		} else if (!orderUser.equals(other.orderUser))
+			return false;
+		return true;
+	}
 	
 }

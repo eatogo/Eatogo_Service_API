@@ -33,4 +33,12 @@ public class OrderService {
 	public Order isOrderExistsBetweenOrderTime(Integer storeId, Date beginTime, Date endTime) {
 		return orderRepository.findTop1ByOrderStoreAndOrderTimeBetween(storeId, beginTime, endTime);
 	}
+	
+	public Order findByOrderId(Integer orderId) {
+		return orderRepository.findOne(orderId);
+	}
+	
+	public Order setOrderConfirmed(Order order) {
+		return orderRepository.save(order);
+	}
 }
