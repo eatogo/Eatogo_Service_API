@@ -85,13 +85,10 @@ public class Review implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Review [reviewId=").append(reviewId)
-			.append(", reviewUser=").append(reviewUser)
-			.append(", reviewOrder=").append(reviewOrder)
-			.append(", reviewFood=").append(reviewFood)
-			.append(", reviewTime=").append(reviewTime)
-			.append(", reviewComment=").append(reviewComment)
-			.append("]");
+		builder.append("Review [reviewId=").append(reviewId).append(", reviewUser=").append(reviewUser)
+				.append(", reviewOrder=").append(reviewOrder).append(", reviewFood=").append(reviewFood)
+				.append(", reviewTime=").append(reviewTime).append(", reviewComment=").append(reviewComment)
+				.append("]");
 		return builder.toString();
 	}
 
